@@ -14,81 +14,103 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @SpringBootTest
 public class MybatisORMTests {
-    
-    @Autowired
-    private BoardMapper boardMapper ;
 
+    @Autowired
+    private BoardMapper boardMapper;
+    
     @Test
-    public void ormSave() {
-        System.out.println("debug mapper >>>>>>>>>>> " + boardMapper) ;
+    public void ormSave(){
+        System.out.println("debug mapper >> " + boardMapper);
+
         BoardRequest request = BoardRequest.builder()
                                 .title("service")
                                 .content("mapper")
                                 .writer("encore")
                                 .noticeYn(true)
                                 .secretYn(true)
-                                .build() ; 
-        boardMapper.save(request); 
-        System.out.println("debug >>>>>> save success "); 
+                                .build();
+        // request.setTitle("orm 수업");
+        // request.setContent("mybatis mapping");
+        // request.setWriter("encore");
+        // request.setNoticeYn(false);
+        // request.setSecretYn(false);
+
+        boardMapper.save(request);
+
+        System.out.println("debug >> save success");
     }
 
     @Test
     public void ormFind() throws Exception {
-        System.out.println("debug finder >>>>>>>>>>>>> ") ; 
+        System.out.println("debug finder >> ");
+
         BoardRequest request = BoardRequest.builder()
-                                .idx(3)
-                                .build() ; 
+                                    .idx(1)
+                                    .build();
+
         BoardResponse response = boardMapper.findByIdx(request);
-        System.out.println("debug find result >>>>> ");
-        System.out.println(response);  
-        System.out.println(">>>>>>>>>>>>>> json ") ; 
-        String boardJson = new ObjectMapper().
-                                registerModule(new JavaTimeModule()).
-                                writeValueAsString(response) ; 
-        System.out.println(boardJson) ; 
+        System.out.println("debug find result >> ");
+        
+        String boardJson = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(response);
+        System.out.println(response);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println(boardJson);
+
     }
 
     @Test
     public void ormUpdate() {
-        System.out.println("debug update >>>>>>>>>>>>> ") ; 
+
+        System.out.println("debug update >>");
+
         BoardRequest request = BoardRequest.builder()
-                                .idx(3)
-                                .title("수정")
-                                .content("변경되네")
-                                .writer("jslim")
-                                .build() ; 
-        boardMapper.updateByIdx(request);  
-        System.out.println("debug >>>> update success ");
+                                .idx(1)
+                                .title("happy")
+                                .content("not happy")
+                                .writer("bak")
+                                .build();
+
+        boardMapper.updateByIdx(request);
+
+        System.out.println("debug update result >> ");
+
     }
 
     @Test
-    public void ormCnt() {
-        System.out.println("debug cnt >>>>>>>>>>>>> ") ; 
-        Integer count = boardMapper.count();
-        System.out.println("debug >>>> count success " + count); 
+    public void ormCount(){
+
+        System.out.println("debug count >>");
+
+        int result = boardMapper.count();
+
+        System.out.println("debug count result >> " + result);
+
     }
 
     @Test
-    public void ormDelete() {
-        System.out.println("debug delete >>>>>>>>>>>>> ") ; 
+    public void ormDelete(){
+
+        System.out.println("debug delete >>");
+
         BoardRequest request = BoardRequest.builder()
-                                .idx(3)
-                                .build() ; 
-        boardMapper.deleteByIdx(request) ; 
-        System.out.println(">>>>>> delete success "); 
+                                .idx(2)
+                                .build();
+
+        boardMapper.deleteByIdx(request);
+
     }
+
     @Test
-    public void ormFindAll() {
-        System.out.println("debug findAll >>>>>>>>>>>>> ") ; 
-        List<BoardResponse> lst = boardMapper.findAll();
-        for(BoardResponse response : lst) {
-            System.out.println(response); 
+    public void ormFindAll(){
+
+        System.out.println("debug findAll >>");
+
+        List<BoardResponse> result = boardMapper.findAll();
+
+        for(BoardResponse r : result){
+            System.out.println(r);
         }
     }
+
+
 }
-
-
-
-
-
-

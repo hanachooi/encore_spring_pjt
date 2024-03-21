@@ -1,14 +1,17 @@
 package com.example.encore_spring_pjt.ctrl.user.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
-@Setter
-@Getter
-@ToString
+@Data
 public class UserRequest {
-    private String id  ;
-    private String pwd ;  
-}
 
+    // 유효성 체크를 위함.
+    @NotBlank(message = "필수")
+    private String id;
+    @NotBlank(message = "입력")
+    private String pwd;
+    @NotBlank(message = "사항입니다.")
+    private String name;
+
+}

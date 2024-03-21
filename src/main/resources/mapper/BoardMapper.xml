@@ -1,110 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.encore_spring_pjt.mapper.BoardMapper"> 
-    <!-- comment -->
-    <sql id="insertColumns">
-        title       ,
-        content     ,
-        writer      ,
-        view_cnt    ,
-        notice_yn   ,
-        secret_yn   ,
-        delete_yn   ,
-        insert_time ,
-        update_time 
+<mapper namespace = "com.example.encore_spring_pjt.mapper.BoardMapper">
+<!-- mapper을 구분하는 부분 -->
+
+    <sql id = "insertColumns">
+        title,
+        content,
+        writer,
+        view_cnt,
+        notice_yn,
+        secret_yn,
+        delete_yn,
+        insert_time,
+        update_time
     </sql>
-    <sql id="selectColumns">
-        idx         ,
-        title       ,
-        content     ,
-        writer      ,
-        view_cnt    ,
-        notice_yn   ,
-        secret_yn   ,
-        delete_yn   ,
-        insert_time ,
-        update_time 
+
+    <sql id = "selectColumns">
+        idx,
+        title,
+        content,
+        writer,
+        view_cnt,
+        notice_yn,
+        secret_yn,
+        delete_yn,
+        insert_time,
+        update_time
     </sql>
+
     <insert id="save"
-            parameterType="com.example.encore_spring_pjt.domain.BoardRequest"
-            useGeneratedKeys="true"
-            keyProperty="idx" >
+        parameterType = "com.example.encore_spring_pjt.domain.BoardRequest"
+        useGeneratedKeys="true"
+        keyProperty="idx" >
+    <!-- Mapper의 메서드가 tag의 식별값으로 사용되며 save의 매개변수가 여기로 들어오는 것-->
+    <!-- 매개변수로 들어온 것이 parameterType에 매핑 -->
+
+        <!-- INSERT INTO ENCORE_BOARD_TBL(TITLE, CONTENT, WRITER, NOTICE_YN, SECRET_YN) -->
         INSERT INTO ENCORE_BOARD_TBL(
-            <include refid="selectColumns" />
+            <include refid="selectColumns"/>
+            <!-- 자동으로 위의 칼럼들이 들어가게 된다. -->
         )
-        VALUES( #{idx},
+        VALUES (#{idx},
                 #{title},
-                #{content},
-                #{writer},
-                0 ,
-                #{noticeYn},
-                false,
+                #{content}, 
+                #{writer}, 
+                0,
+                #{noticeYn}, 
+                #{secretYn},
                 false,
                 NOW(),
                 NULL)
+
+        <!-- 데이터는 대소문자 구분, 식별자는 구분X -->
+
     </insert>
 
-    <select id="findByIdx" 
+    <select id="findByIdx"
             parameterType="com.example.encore_spring_pjt.domain.BoardRequest"
-            resultType="com.example.encore_spring_pjt.domain.BoardResponse"> 
-        SELECT  
-            <include refid="selectColumns" /> 
-        FROM    
-            ENCORE_BOARD_TBL 
-        WHERE   
-            IDX = #{idx}   
+            resultType="com.example.encore_spring_pjt.domain.BoardResponse">
+            <!-- 매개변수 형태를 parameterType에 매핑, 결과값 형태를 resultType에 매핑 -->
+        
+        SELECT <include refid="selectColumns"></include>
+        FROM ENCORE_BOARD_TBL
+        WHERE IDX = #{idx}
+        
     </select>
-    
+
     <update id="updateByIdx"
             parameterType="com.example.encore_spring_pjt.domain.BoardRequest">
-        UPDATE ENCORE_BOARD_TBL 
-        SET 
-            UPDATE_TIME = NOW(),
-            TITLE       = #{title}, 
-            CONTENT     = #{content}, 
-            WRITER      = #{writer}
-        WHERE 
-            IDX = #{idx}
+
+            UPDATE ENCORE_BOARD_TBL
+            SET title = #{title}, content = #{content}, writer= #{writer}, update_time = NOW()
+            WHERE IDX = #{idx}
+
     </update>
 
     <select id="count"
-            resultType="java.lang.Integer">
-        SELECT
-            COUNT(*)
-        FROM    
-            ENCORE_BOARD_TBL 
-        WHERE 
-            DELETE_YN = 0 
+            parameterType="com.example.encore_spring_pjt.paging.PageDTO"
+            resultType = "java.lang.Integer">
+            <!-- int나 Integer나 java.lang.Integer 상관없음 -->
+
+            SELECT COUNT(*)
+            FROM ENCORE_BOARD_TBL
+
     </select>
 
-    <delete id="deleteByIdx"
-            parameterType="com.example.encore_spring_pjt.domain.BoardRequest">
-        UPDATE ENCORE_BOARD_TBL 
-        SET 
-            DELETE_YN   = 1 ,
-            DELETE_TIME = NOW() 
-        WHERE 
-            IDX = #{idx} 
+    <delete id="deleteByIdx">
+
+        UPDATE ENCORE_BOARD_TBL
+        SET DELETE_YN = 1, DELETE_TIME = NOW()
+        WHERE IDX = #{idx}
+
     </delete>
 
+    <sql id = "search">
+        <!-- 검색 조건이 있을 때 -->
+        <if test = "keyword != null">
+            <choose>
+                <!-- 검색 타입이 있을 때 -->
+                <when test = "'title'.equals(searchType)">
+                    AND TITLE LIKE CONCAT('%', #{keyword},'%')
+                </when>
+                <when test = "'writer'.equals(searchType)">
+                    AND WRITER LIKE CONCAT('%', #{keyword},'%')
+                </when>
+                <when test = "'content'.equals(searchType)">
+                    AND CONTENT LIKE CONCAT('%', #{keyword},'%')
+                </when>
+                <!-- 조건이 전체일 때 -->
+                <otherwise>
+                AND(
+                    TITLE LIKE CONCAT('%', #{keyword},'%')
+                    OR
+                    WRITER LIKE CONCAT('%',#{keyword},'%')
+                    OR
+                    CONTENT LIKE CONCAT('%', #{keyword},'%')
+                    )
+
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
     <select id="findAll"
+            parameterType="com.example.encore_spring_pjt.paging.PageDTO"
             resultType="com.example.encore_spring_pjt.domain.BoardResponse">
-        SELECT  
-            <include refid="selectColumns" /> 
-        FROM    
-            ENCORE_BOARD_TBL 
+            <!-- java.util.List -->
+            <!-- com.example.encore_spring_pjt.domain.BoardResponse -->
+
+        SELECT
+            <include refid="selectColumns"/>
+        FROM 
+            ENCORE_BOARD_TBL
         WHERE
-            DELETE_YN = 0 
+        DELETE_YN = 0
+        <include refid="search" />
+        ORDER BY
+            IDX ASC
+        LIMIT #{pagination.limitStart}, #{recordSize}
+
     </select>
 
     <update id="updateByCnt"
-            parameterType="com.example.encore_spring_pjt.domain.BoardRequest">
-        UPDATE 
-            ENCORE_BOARD_TBL 
-        SET 
-            VIEW_CNT = VIEW_CNT + 1 
-        WHERE 
-            IDX = #{idx} 
+        parameterType="com.example.encore_spring_pjt.domain.BoardRequest">
+    
+        UPDATE
+            ENCORE_BOARD_TBL
+        SET
+            VIEW_CNT = VIEW_CNT + 1
+        WHERE
+            IDX = #{idx}
+    
     </update>
+    
+
 </mapper>

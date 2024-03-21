@@ -1,7 +1,5 @@
-<%@ page 	language="java" 
-			contentType="text/html; charset=UTF-8"
-    		pageEncoding="UTF-8" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 	<html>
 		<head>
 		  <meta charset="UTF-8">
@@ -33,6 +31,9 @@
 		<div class="form-group has-feedback">
 		  <input type="password" name="pwd" class="form-control" placeholder="Password"/>
 		  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+			<span style="color: red;">${failMsg}</span>
+
 		</div>
 		<div class="row">
 		  <div class="col-xs-8">    
@@ -48,14 +49,16 @@
 		</div>
 	  </form>
 	  		<!-- 카카오 로그인 -->
-			<a class="p-2" href="">
-				카카오 oauth
-			</a><br/>	
-			
-	
-			<a href="#">I forgot my password</a><br>
-	  		<a href="#" class="text-center">Register a new membership</a>
-	  
+			<a class="p-2" href="https://kauth.kakao.com/oauth/authorize?client_id=fb0e7d80d7a723a4a8d4b65e6afe125d&redirect_uri=http://localhost:8888/user/kakao_login.hanwha&response_type=code"">
+				<img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" class="img-responsive" />
+			</a><br/>
+
+
+				<a href="#">I forgot my password</a><br>
+				<a href="/user/join.hanwha" class="text-center">Register a new membership</a>
+
+			</div><!-- /.login-box-body -->
+		  </div><!-- /.login-box -->
 			</div><!-- /.login-box-body -->
 		  </div><!-- /.login-box -->
 	  

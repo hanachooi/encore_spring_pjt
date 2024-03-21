@@ -2,16 +2,23 @@
 
 <!-- 
 log란 ?
-- 특정한 이벤트를 기록하는 것 
+- 특정한 이벤트를 기록하는 것
 - 소프트웨어가 동작하면서 발생되는 문제점을 찾아내고 해결하기 위한 디자인
-- 모니터링하자 
-- slf4j : Simple Logging Facade for Java : 추상화된 인터페이스
-- log4j : 구현되어 있는 구현체
-- appender : 어디에 출력할지 결정(콘솔, 파일저장, DB 저장) 
-- logger   : 로그를 출력할 요소(level 속성을 통해서 출력)
-- level    : fatal(치명적), error(문제발생상태), warn(경고), info(정보성 메시지), debug(개발시)
--->
+- 모니터링
+- slf4j - Simple Logging Facade For Java : 추상화된 인터페이스
+- log4j : 구현되어 있는 구현체, 이 파일도 하나의 log4j
+- <appender> : 어디에 출력할지를 결정 (콘솔, 파일저장, DB저장)
+- logger : 로그를 출력할 요소 (level 속성을 통해서 출력)
+-> level (fatal, error, warning, info, debug) 
+- fatal : 치명적인 문제 발생
+- error : 문제 발생 상태
+- warning : 경고
+- info : 정보
+- debug : 개발시에 사용
+ -->
+
 <configuration debug="true">
+
     <!-- Appenders -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -27,9 +34,9 @@ log란 ?
 
     <!-- Logger -->
     <logger name="com.example.encore_spring_pjt" level="DEBUG" appender-ref="console" />
-    <logger name="jdbc.sqlonly"         level="INFO" appender-ref="console-infolog" />
-    <logger name="jdbc.sqltiming"       level="DEBUG" appender-ref="console" />
-    <logger name="jdbc.resultsettable"  level="INFO" appender-ref="console-infolog" />
+    <logger name="jdbc.sqlonly" level="INFO" appender-ref="console-infolog" />
+    <logger name="jdbc.sqltiming" level="DEBUG" appender-ref="console-infolog" />
+    <logger name="jdbc.resultsettable" level="INFO" appender-ref="console-infolog" />
 
     <!-- Root Logger -->
     <root level="off">

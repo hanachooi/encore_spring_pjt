@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "com.example.encore_spring_pjt.day0314.UserMapper">
+    <!-- 암호화 되기 전의 로그인 구현
+    <select id = "loginRow"
+            parameterType = "com.example.encore_spring_pjt.ctrl.user.domain.UserRequest"
+            resultType = "com.example.encore_spring_pjt.day0314.UserResponse"
+    >
+        SELECT ID, PWD, NAME, POINT
+        FROM ENCORE_USER_MEMBER_TBL
+        WHERE ID = #{id} AND PWD = #{pwd}
+    </select>
+    -->
+
+    <!-- 암호화가 이루어진 후의 로그인 구현 ,,  PWD 를 WHERE 조건절에서 빼야 한다. -->
+    <select id = "loginRow"
+            parameterType = "com.example.encore_spring_pjt.ctrl.user.domain.UserRequest"
+            resultType = "com.example.encore_spring_pjt.day0314.UserResponse"
+    >
+        SELECT ID, PWD, NAME, POINT
+        FROM ENCORE_USER_MEMBER_TBL
+        WHERE ID = #{id}
+    </select>
+
+    <insert id="registerRow"
+            parameterType="com.example.encore_spring_pjt.ctrl.user.domain.UserRequest">
+        INSERT  INTO ENCORE_USER_MEMBER_TBL
+        VALUES (#{id}, #{pwd}, #{name}, 0)
+    </insert>
+</mapper>

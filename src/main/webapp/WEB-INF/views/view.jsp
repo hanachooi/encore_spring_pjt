@@ -18,6 +18,8 @@
             <h1 class="page-title">Hanwha SW Camp 5th</h1>
         </div>
     </div>
+    <%-- 세션 처리 추가 --%>
+
     
 	<div id="wrapper">
         <div class="main-content">
@@ -25,59 +27,58 @@
                 <div class="col-xs-12">
                     <div class="box-content">
 
-
-    <input type="hidden" id="idx" value="${response.idx}"/> 
-
     <div class="card-content">
         <div class="form-group">
             <label class="col-sm-2 control-label">제목</label>
             <div class="col-sm-10">
-                <p class="form-control" id="title">${response.title}</p> 
+                <p class="form-control" id="title">${ result.title }</p> 
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">이름</label>
             <div class="col-sm-10">
-                <p class="form-control" id="writer">${response.writer}</p> 
+                <p class="form-control" id="writer">${ result.writer }</p> 
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">내용</label>
             <div class="col-sm-10">
-                <p class="form-control" id="content">${response.content}</p> 
+                <p class="form-control" id="content">${ result.content }</p> 
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">등록일</label>
             <div class="col-sm-10">
-                <p class="form-control">${response.insertTime}</p> 
+                <p class="form-control">${ result.insertTime }</p> 
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">조회 수</label>
             <div class="col-sm-10">
-                <p class="form-control" id="viewCnt">${response.viewCnt}</p> 
+                <p class="form-control" id="viewCnt">${ result.viewCnt }</p> 
             </div>
         </div>
 
         <div class="btn_wrap text-center">
             <a  href="/board/list.hanwha" 
-                class="btn btn-default waves-effect waves-light">뒤로가기</a>
-            <a  href="/board/write.hanwha?idx=${response.idx}"  
-                class="btn btn-primary waves-effect waves-light">수정하기</a>
-            <%--    
-            <a  href="/board/delete.hanwha?idx=${response.idx}"  
-                class="btn btn-danger waves-effect waves-light">삭제하기</a>
-            --%>
+                class="btn btn-default waves-effect waves-light"
+                onclick="listPage();">뒤로가기</a>
+            <a  href="/board/write.hanwha?idx=${result.idx}" 
+                class="btn btn-primary waves-effect waves-light"
+                >수정하기</a>
             
-            <button type="button" 
-                    class="btn btn-danger waves-effect waves-light" 
-                    id="delBtn">삭제하기</button>
-            
+            <%-- <a  href="/board/delete.hanwha?idx=${result.idx}" 
+                class="btn btn-danger waves-effect waves-light"
+                onclick="writePage();">삭제하기</a> --%>
+
+            <button type="button" class="btn btn-danger waves-effect waves-light" id="delBtn">삭제하기</button>
+        
+            <input type="hidden" id="idx" value="${result.idx}" />
+        
         </div>
     </div>
 
@@ -133,21 +134,24 @@
         			
         <script>
         /*<![CDATA[*/
-        $(document).ready(function() {
-            $("#delBtn").click(function() {
-                // window.alert("버튼을 클릭하셨습니다.....") ; 
-                // console.log(">>>>>>>>>>>>>>>>>> "); 
-                console.log( location.search  ) ; 
-                // console.log(">>>>>>>>>>>>>>>>>> ");
-                // const idx = $("#idx").val() ;  
-                if( !confirm(idx + "번 게시글 삭제할까요?") ) {
-                    return false ; 
-                } else {
-                    location.href="/board/delete.hanwha"+location.search ;  
-                }
-            })    
-        }) ; 
+            $(document).ready(function(){
+                $("#delBtn").click(function(){
+                    // window.alert("버튼을 클릭하셨습니다.");
+                    // console.log( $("#idx").val() );
 
+                    // QueryString을 출력
+                    console.log(location.search)
+
+                    // 중복되지 않는 상수값
+                    const idx = $("#idx").val();
+                    if(!confirm(idx + "번 게시글을 삭제할까요?")){
+                        return false;
+                    }else {
+                        location.href="/board/delete.hanwha?idx=" + location.search;
+                    }
+
+                })
+            });
         /*]]>*/
         </script>
 </body>
